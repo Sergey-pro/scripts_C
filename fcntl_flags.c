@@ -27,22 +27,22 @@ void dispaly_flags(char *label, unsigned int value){
 }
 
 void binary_print(unsigned int value){
-	unsigned int mask = 0xff000000;
-	unsigned int shift = 256*256*256;
+	unsigned int mask = 0xff000000; // маска для самого старшего байта
+	unsigned int shift = 256*256*256; // смещение для самого старшего байта
 	unsigned int byte, byte_iterator, bit_iterator;
 
-	for(byte_iterator = 0; byte_iterator < 4; byte_iterator++){
-		byte = (value & mask) / shift;
+	for(byte_iterator = 0; byte_iterator < 4; byte_iterator++){ 
+		byte = (value & mask) / shift; // изолируем каждый байт
 		printf(" ");
-		for(bit_iterator = 0; bit_iterator < 8; bit_iterator++){
-			if(byte & 0x80){
-				printf("1");
+		for(bit_iterator = 0; bit_iterator < 8; bit_iterator++){ // отображаем биты байта
+			if(byte & 0x80){ // если самый старший бит в байте не 0
+				printf("1"); // отображаем 1
 			}else{
-				printf("0");
+				printf("0"); // иначе 0
 			}
-			byte *= 2;
+			byte *= 2; // смещаем все биты в лево на 1
 		}
-		mask /= 256;
-		shift /= 256;
+		mask /= 256; // смещаем биты маски вправо на 8
+		shift /= 256; //смещаем биты в сдвиге вправо на 8
 	}
 }

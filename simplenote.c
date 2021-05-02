@@ -10,37 +10,37 @@ void usage(char *prog_name, char *filname){
 	exit(0);
 }
 
-void fatal(char *message);
-void *ec_malloc(unsigned int size);
+void fatal(char *message); // Функция обрабатывающая критические ошибки
+void *ec_malloc(unsigned int size); // обёртка функции malloc() с проверкой ошибок
 
 int main(int argc, char const *argv[])
 {
-	int fd;
+	int fd; // дескриптор файла
 	char *buffer, *datafile;
 
 	buffer = (char *)ec_malloc(100);
 	datafile = (char *)ec_malloc(20);
 	strcpy(datafile, "/tmp/notes");
 
-	if(argc < 2)
-		usage(argv[0], datafile);
+	if(argc < 2) // если аргументов командной строки нет,
+		usage(argv[0], datafile); // отображаем сообщение usage и завершае работу
 
-	strcpy(buffer, argv[1]);
+	strcpy(buffer, argv[1]); // копирование в буфер
 
 	printf("[DEBUG] buffer @ %p: \'%s\'\n", buffer, buffer);
 	printf("[DEBUG] datafile @ %p: \'%s\'\n", datafile, datafile);
 
-	strncat(buffer, "\n", 1);
-
+	strncat(buffer, "\n", 1); // добавление новой строки в конец
+	// открываем файл
 	fd = open(datafile, O_WRONLY|O_CREAT|O_APPEND, S_IRUSR|S_IWUSR);
 
 	if(fd == -1)
 		fatal("в функции main() при открытии файла");
 	printf("[DEBUG] дескриптор файла %d\n", fd);
-
+	// записываем данные
 	if(write(fd, buffer, strlen(buffer)) == -1)
 		fatal("в функции main() при записи буфера в файл");
-
+	// закрываем файл
 	if(close(fd) == -1)
 		fatal("в функции main() при закрытия файла");
 
